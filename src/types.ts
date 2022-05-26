@@ -78,6 +78,7 @@ export type NodeType =
   | 'strong'
   | 'em'
   | 's'
+  | 'sub'
   | 'link'
   | 'code'
   | 'text'
