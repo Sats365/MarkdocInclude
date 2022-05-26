@@ -93,7 +93,7 @@ function validateFunction(fn: Function, config: Config): ValidationError[] {
       if (Ast.isAst(value) && !Ast.isFunction(value)) continue;
 
       if (param.type) {
-        const valid = validateType(param.type, value, config);
+        const valid = validateType(param.type, value as any, config);
         if (valid === false) {
           errors.push({
             id: 'parameter-type-invalid',

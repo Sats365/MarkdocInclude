@@ -7,6 +7,7 @@ import type {
   Schema,
   RenderableTreeNode,
   RenderableTreeNodes,
+  SchemaAttribute,
 } from './types';
 
 type AttributesSchema = Schema['attributes'];
@@ -34,21 +35,24 @@ export default {
 
     const attrs = { ...globalAttributes, ...schema.attributes };
     for (const [key, attr] of Object.entries(attrs)) {
-      if (attr.render == false) continue;
+      if ((attr as SchemaAttribute).render == false) continue;
 
-      const name = typeof attr.render === 'string' ? attr.render : key;
+      const name =
+        typeof (attr as SchemaAttribute).render === 'string'
+          ? (attr as SchemaAttribute).render
+          : key;
 
       let value = node.attributes[key];
-      if (typeof attr.type === 'function') {
-        const instance: any = new attr.type();
+      if (typeof (attr as any).type === 'function') {
+        const instance: any = new (attr as any).type();
         if (instance.transform) {
           value = instance.transform(value, config);
         }
       }
-      value = value === undefined ? attr.default : value;
+      value = value === undefined ? (attr as SchemaAttribute).default : value;
 
       if (value === undefined) continue;
-      output[name] = value;
+      output[name as string] = value;
     }
 
     return output;

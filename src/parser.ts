@@ -50,7 +50,7 @@ function handleAttrs(token: Token, type: string) {
     }
     case 'td':
     case 'th': {
-      const attrs = Object.fromEntries(token.attrs);
+      const attrs = Object.fromEntries(token.attrs ?? []);
       let align = 'left';
       if (attrs.style) {
         if (attrs.style.includes('center')) {
