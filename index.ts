@@ -39,7 +39,10 @@ function mergeConfig(config: Config = {}): Config {
 	};
 }
 
-export function use(plugin: MarkdownIt.PluginWithParams, ...params: any[]): MarkdownIt {
+const plugins: string[] = [];
+export function use(plugin: MarkdownIt.PluginWithParams, name: string, ...params: any[]): MarkdownIt {
+	if (!plugins.includes(name)) plugins.push(name);
+	else return null;
 	return tokenizer.use(plugin, ...params);
 }
 
