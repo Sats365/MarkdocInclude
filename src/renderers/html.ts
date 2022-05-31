@@ -35,8 +35,9 @@ export default function render(node: RenderableTreeNodes, { components = {} } = 
 
 	let output = "";
 	if (components[name]) {
-		console.log(components[name]);
-		output = ReactDOMServer.renderToString(components[name](attributes));
+		output = ReactDOMServer.renderToString(
+			components[name]({ ...attributes, children: render(children, { components }) })
+		);
 	} else {
 		output = `<${name}`;
 		for (const [k, v] of Object.entries(attributes ?? {})) output += ` ${k}="${escapeHtml(String(v))}"`;
