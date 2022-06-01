@@ -34,7 +34,7 @@ export default function render(node: RenderableTreeNodes, { components = {} } = 
 	if (!name) return render(children, { components });
 
 	let output = "";
-	if (components[name]) {
+	if (components?.[name]) {
 		output = ReactDOMServer.renderToString(
 			components[name]({ ...attributes, children: render(children, { components }) })
 		);
@@ -45,9 +45,10 @@ export default function render(node: RenderableTreeNodes, { components = {} } = 
 	}
 
 	if (voidElements.has(name)) return output;
-
-	if (children.length) output += render(children, { components });
-	if (!components[name]) output += `</${name}>`;
+	if (!components?.[name]) {
+		if (children.length) output += render(children, { components });
+		output += `</${name}>`;
+	}
 
 	return output;
 }
