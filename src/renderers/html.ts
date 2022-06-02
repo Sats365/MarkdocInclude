@@ -1,3 +1,4 @@
+import React from "react";
 import MarkdownIt from "markdown-it";
 import type { RenderableTreeNodes } from "../types";
 import ReactDOMServer from "react-dom/server";
@@ -36,7 +37,7 @@ export default function render(node: RenderableTreeNodes, { components = {} } = 
 	let output = "";
 	if (components?.[name]) {
 		output = ReactDOMServer.renderToString(
-			components[name]({ ...attributes, children: render(children, { components }) })
+			React.createElement(components[name], attributes, render(children, { components }))
 		);
 	} else {
 		output = `<${name}`;
