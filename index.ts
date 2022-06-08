@@ -50,6 +50,9 @@ export function parse(content: string | Token[], file?: string): Node {
 	if (typeof content === "string") content = tokenizer.tokenize(content);
 	return parser(content, file);
 }
+export function renderMarkdownItHtml(content: string): string {
+	return tokenizer.renderToHtml(content);
+}
 
 export function resolve<C extends Config = Config>(content: Node, config: C): Node;
 export function resolve<C extends Config = Config>(content: Node[], config: C): Node[];
@@ -100,6 +103,7 @@ export default {
 	transformer,
 	validator,
 	parse,
+	renderMarkdownItHtml,
 	transform,
 	validate,
 	createElement,

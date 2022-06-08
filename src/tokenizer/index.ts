@@ -20,4 +20,8 @@ export default class Tokenizer {
 	tokenize(content: string): Token[] {
 		return this.parser.parse(content.toString(), {});
 	}
+
+	renderToHtml(content: string): string {
+		return this.parser.render(content);
+	}
 }
