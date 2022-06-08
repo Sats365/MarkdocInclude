@@ -1,51 +1,50 @@
-import { tagName } from './shared';
-import type { createElement, Fragment, ReactNode } from 'react';
-import type { RenderableTreeNodes, Scalar } from '../../types';
+import { tagName } from "./shared";
+import type { createElement, Fragment, ReactNode } from "react";
+import type { RenderableTreeNodes, Scalar } from "../../types";
 
 type ReactShape = Readonly<{
-  createElement: typeof createElement;
-  Fragment: typeof Fragment;
+	createElement: typeof createElement;
+	Fragment: typeof Fragment;
 }>;
 
 export default function dynamic(
-  node: RenderableTreeNodes,
-  React: ReactShape,
-  { components = {} } = {}
+	node: RenderableTreeNodes,
+	React: ReactShape,
+	TextRenderer: ({ content }: { content: string }) => JSX.Element,
+	{ components = {} } = {}
 ) {
-  function deepRender(value: any): any {
-    if (value == null || typeof value !== 'object') return value;
+	function deepRender(value: any): any {
+		if (value == null || typeof value !== "object") return value;
 
-    if (Array.isArray(value)) return value.map((item) => deepRender(item));
+		if (Array.isArray(value)) return value.map((item) => deepRender(item));
 
-    if (value.$$mdtype === 'Tag') return render(value);
+		if (value.$$mdtype === "Tag") return render(value);
 
-    if (typeof value !== 'object') return value;
+		if (typeof value !== "object") return value;
 
-    const output: Record<string, Scalar> = {};
-    for (const [k, v] of Object.entries(value)) output[k] = deepRender(v);
-    return output;
-  }
+		const output: Record<string, Scalar> = {};
+		for (const [k, v] of Object.entries(value)) output[k] = deepRender(v);
+		return output;
+	}
 
-  function render(node: RenderableTreeNodes): ReactNode {
-    if (Array.isArray(node))
-      return React.createElement(React.Fragment, null, ...node.map(render));
+	function render(node: RenderableTreeNodes): ReactNode {
+		if (Array.isArray(node)) return React.createElement(React.Fragment, null, ...node.map(render));
 
-    if (node === null || typeof node !== 'object') return node;
+		if (node === null || typeof node !== "object") {
+			if (typeof node === "string") return React.createElement(TextRenderer, { content: node }, null);
+			return node;
+		}
 
-    const {
-      name,
-      attributes: { class: className, ...attrs } = {},
-      children = [],
-    } = node;
+		const { name, attributes: { class: className, ...attrs } = {}, children = [] } = node;
 
-    if (className) attrs.className = className;
+		if (className) attrs.className = className;
 
-    return React.createElement(
-      tagName(name, components),
-      Object.keys(attrs).length == 0 ? null : deepRender(attrs),
-      ...children.map(render)
-    );
-  }
+		return React.createElement(
+			tagName(name, components),
+			Object.keys(attrs).length == 0 ? null : deepRender(attrs),
+			...children.map(render)
+		);
+	}
 
-  return render(node);
+	return render(node);
 }
