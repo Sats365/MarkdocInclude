@@ -29,7 +29,8 @@ export default function dynamic(
 
 	function render(node: RenderableTreeNodes): ReactNode {
 		if (Array.isArray(node)) return React.createElement(React.Fragment, null, ...node.map(render));
-		if (typeof node === "string") return React.createElement(TextRenderer, { content: node }, null);
+		// if (typeof node === "string") return React.createElement(TextRenderer, { content: node }, null);
+		if (typeof node === "string") return node;
 		if (node === null) return null;
 
 		const { name, attributes: { class: className, ...attrs } = {}, children = [] } = node;
