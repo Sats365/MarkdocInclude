@@ -19,7 +19,7 @@ import MarkdownIt from "markdown-it";
 
 export * from "./src/types";
 
-const tokenizer = new Tokenizer();
+const tokenizer = new Tokenizer({ linkify: true });
 
 function mergeConfig(config: Config = {}): Config {
 	return {
