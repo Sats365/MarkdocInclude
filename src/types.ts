@@ -1,4 +1,4 @@
-import MarkdownFormatterConfig from "../../../parsers/MarkdownFormatter/MarkdownFormatterCongig";
+import MarkdownFormatterConfig from "../../../Markdown/MarkdownFormatter/MarkdownFormatterCongig";
 import type Func from "./ast/function";
 import type Node from "./ast/node";
 import type Tag from "./ast/tag";
