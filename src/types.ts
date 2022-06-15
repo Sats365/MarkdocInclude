@@ -93,21 +93,33 @@ export type RenderableTreeNodes = RenderableTreeNode | RenderableTreeNode[];
 
 export type Scalar = Primitive | Scalar[] | { [key: string]: Scalar };
 
-export type Schema<C extends Config = Config, R = string> = {
+export type Schema<
+	T extends { [name: string]: SchemaAttribute } = { [name: string]: SchemaAttribute },
+	C extends Config = Config,
+	R = string
+> = {
 	render?: R;
 	children?: string[];
-	attributes?: Record<string, SchemaAttribute>;
+	attributes?: T;
 	selfClosing?: boolean;
 	childrenJoinChar?: string;
 	transform?(node: Node, config: C): RenderableTreeNodes;
 	validate?(node: Node, config: C): ValidationError[];
-	formatter?(tag: Tag, children: Markdown, config: MarkdownFormatterConfig): Markdown;
+	formatter?(
+		tag: Tag<{ [P in keyof T]: T[P]["type"] }>,
+		children: Markdown,
+		config: MarkdownFormatterConfig
+	): Markdown;
 };
 
 export type Markdown = string;
 
+export type AttrType<T> = object &
+	(keyof T extends string ? {} : "T must only have string keys") &
+	(T[keyof T] extends string ? {} : "T must only have string values");
+
 export type SchemaAttribute = {
-	type?: ValidationType | ValidationType[];
+	type?: ValidationType;
 	render?: boolean | string;
 	default?: any;
 	required?: boolean;
