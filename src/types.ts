@@ -1,3 +1,4 @@
+import MarkdownFormatterConfig from "../../../parsers/MarkdownFormatter/MarkdownFormatterCongig";
 import type Func from "./ast/function";
 import type Node from "./ast/node";
 import type Tag from "./ast/tag";
@@ -97,10 +98,13 @@ export type Schema<C extends Config = Config, R = string> = {
 	children?: string[];
 	attributes?: Record<string, SchemaAttribute>;
 	selfClosing?: boolean;
+	childrenJoinChar?: string;
 	transform?(node: Node, config: C): RenderableTreeNodes;
 	validate?(node: Node, config: C): ValidationError[];
-	renderer?(node: Tag): Tag;
+	formatter?(node: Tag, children: Markdown, config: MarkdownFormatterConfig): Markdown;
 };
+
+export type Markdown = string;
 
 export type SchemaAttribute = {
 	type?: ValidationType | ValidationType[];
