@@ -101,7 +101,7 @@ export type Schema<C extends Config = Config, R = string> = {
 	childrenJoinChar?: string;
 	transform?(node: Node, config: C): RenderableTreeNodes;
 	validate?(node: Node, config: C): ValidationError[];
-	formatter?(node: Tag, children: Markdown, config: MarkdownFormatterConfig): Markdown;
+	formatter?(tag: Tag, children: Markdown, config: MarkdownFormatterConfig): Markdown;
 };
 
 export type Markdown = string;
