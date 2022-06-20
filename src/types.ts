@@ -99,8 +99,8 @@ export type Schema<C extends Config = Config, R = string> = {
 	attributes?: Record<string, SchemaAttribute>;
 	selfClosing?: boolean;
 	type?: SchemaType;
-	childrenJoinChar?: string;
-	transform?(node: Node, config: C): RenderableTreeNodes;
+	getChildren?(childrens: Markdown[], parent: Tag): Markdown;
+	transform?(node: Node, config: C, parent?: Node): RenderableTreeNodes;
 	validate?(node: Node, config: C): ValidationError[];
 	formatter?(tag: Tag, children: Markdown, config: MarkdownFormatterConfig, parent?: Tag): Markdown;
 };
