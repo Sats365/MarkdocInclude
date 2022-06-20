@@ -98,11 +98,18 @@ export type Schema<C extends Config = Config, R = string> = {
 	children?: string[];
 	attributes?: Record<string, SchemaAttribute>;
 	selfClosing?: boolean;
+	type?: SchemaType;
 	childrenJoinChar?: string;
 	transform?(node: Node, config: C): RenderableTreeNodes;
 	validate?(node: Node, config: C): ValidationError[];
-	formatter?(tag: Tag, children: Markdown, config: MarkdownFormatterConfig): Markdown;
+	formatter?(tag: Tag, children: Markdown, config: MarkdownFormatterConfig, parent?: Tag): Markdown;
 };
+
+export enum SchemaType {
+	block = "block",
+	inline = "inline",
+	variable = "variable",
+}
 
 export type Markdown = string;
 
