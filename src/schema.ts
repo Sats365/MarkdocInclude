@@ -56,6 +56,10 @@ export const fence: Schema = {
 export const blockquote: Schema = {
 	render: "blockquote",
 	children: ["heading", "paragraph", "image", "table", "tag", "fence", "blockquote", "list", "hr"],
+	transform(node, config, parent) {
+		node.attributes.depth = (parent.attributes.depth ?? -1) + 1;
+		return new Tag(`blockquote`, { depth: node.attributes.depth }, node.transformChildren(config));
+	},
 };
 
 export const item: Schema = {
