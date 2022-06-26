@@ -218,11 +218,11 @@ function peg$parse(input, options) {
       });
     }
 
-    const [type, nesting] = close ? ['tag', 0] : ['tag_open', 1];
+    const [type, nesting] = close ? ["tag", 0] : ["tag_self_open", 1];
     return { type, nesting, meta: { tag, attributes } };
   };
   var peg$f4 = function (tag) {
-    return { type: 'tag_close', nesting: -1, meta: { tag } };
+    return { type: "tag_self_close", nesting: -1, meta: { tag } };
   };
   var peg$f5 = function (head, tail) {
     return !head ? [] : [head, ...tail];

@@ -96,6 +96,7 @@ export default {
 	functions,
 	renderers,
 	transforms,
+	tokenizer,
 	Ast,
 	Tag,
 	Tokenizer,

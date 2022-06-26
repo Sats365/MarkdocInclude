@@ -1,4 +1,5 @@
 import MarkdownFormatterConfig from "../../../Markdown/MarkdownFormatter/MarkdownFormatterConfig";
+// import { EditRenderableTreeNode } from "../../MarkdownParser/MarkdownParser";
 import type Func from "./ast/function";
 import type Node from "./ast/node";
 import type Tag from "./ast/tag";
@@ -101,6 +102,7 @@ export type Schema<C extends Config = Config, R = string> = {
 	type?: SchemaType;
 	getChildren?(childrens: Markdown[], parent: Tag): Markdown;
 	transform?(node: Node, config: C, parent?: Node): RenderableTreeNodes;
+	editTransform?(node: Tag, parse: (text: string) => any, parent?: Tag): any;
 	validate?(node: Node, config: C): ValidationError[];
 	formatter?(tag: Tag, children: Markdown, config: MarkdownFormatterConfig, parent?: Tag): Markdown;
 };

@@ -24,4 +24,8 @@ export default class Tokenizer {
 	renderToHtml(content: string): string {
 		return this.parser.render(content);
 	}
+
+	getParser(): MarkdownIt {
+		return this.parser;
+	}
 }
