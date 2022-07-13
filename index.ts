@@ -15,11 +15,11 @@ import transforms from "./src/transforms/index";
 
 import type Token from "markdown-it/lib/token";
 import type { Config, RenderableTreeNode, ValidateError } from "./src/types";
-// import MarkdownIt from "markdown-it";
+import MarkdownIt from "markdown-it";
 
 export * from "./src/types";
 
-// const tokenizer = new Tokenizer({ linkify: true });
+const tokenizer = new Tokenizer({ linkify: true });
 
 function mergeConfig(config: Config = {}): Config {
 	return {
@@ -40,19 +40,19 @@ function mergeConfig(config: Config = {}): Config {
 }
 
 const plugins: string[] = [];
-// export function use(plugin: MarkdownIt.PluginWithParams, name: string, ...params: any[]): MarkdownIt {
-// 	if (!plugins.includes(name)) plugins.push(name);
-// 	else return null;
-// 	return tokenizer.use(plugin, ...params);
-// }
+export function use(plugin: MarkdownIt.PluginWithParams, name: string, ...params: any[]): MarkdownIt {
+	if (!plugins.includes(name)) plugins.push(name);
+	else return null;
+	return tokenizer.use(plugin, ...params);
+}
 
-export function parse(content: Token[], file?: string): Node {
-	// if (typeof content === "string") content = tokenizer.tokenize(content);
+export function parse(content: string | Token[], file?: string): Node {
+	if (typeof content === "string") content = tokenizer.tokenize(content);
 	return parser(content, file);
 }
-// export function renderMarkdownItHtml(content: string): string {
-// 	return tokenizer.renderToHtml(content);
-// }
+export function renderMarkdownItHtml(content: string): string {
+	return tokenizer.renderToHtml(content);
+}
 
 export function resolve<C extends Config = Config>(content: Node, config: C): Node;
 export function resolve<C extends Config = Config>(content: Node[], config: C): Node[];
@@ -96,7 +96,7 @@ export default {
 	functions,
 	renderers,
 	transforms,
-	// tokenizer,
+	tokenizer,
 	Ast,
 	Tag,
 	Tokenizer,
@@ -104,11 +104,11 @@ export default {
 	transformer,
 	validator,
 	parse,
-	// renderMarkdownItHtml,
+	renderMarkdownItHtml,
 	transform,
 	validate,
 	createElement,
-	// use,
+	use,
 	truthy,
 };
 
