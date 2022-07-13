@@ -43,6 +43,7 @@ export default {
 			if (value === undefined) continue;
 			output[name as string] = value;
 		}
+		if (node?.attributes?.NodeId) output["NodeId"] = node.attributes.NodeId;
 
 		return output;
 	},
@@ -53,7 +54,11 @@ export default {
 
 	node(node: Node, config: Config = {}, parent?: Node) {
 		const schema = this.findSchema(node, config) ?? {};
-		if (schema && schema.transform instanceof Function) return schema.transform(node, config, parent);
+		if (schema && schema.transform instanceof Function) {
+			const tag = schema.transform(node, config, parent);
+			if (node?.attributes?.["NodeId"] && typeof tag !== "string") tag.addNodeId(node.attributes["NodeId"]);
+			return tag;
+		}
 
 		const children = this.children(node, config);
 		if (!schema || !schema.render) return children;
