@@ -12,8 +12,4 @@ export default class Tag {
 		this.attributes = attributes;
 		this.children = children;
 	}
-
-	addNodeId(id: string) {
-		this.attributes["NodeId"] = id;
-	}
 }

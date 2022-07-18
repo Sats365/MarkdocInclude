@@ -114,7 +114,7 @@ function handleToken(
     });
   }
 
-  const attrs = { ...handleAttrs(token, typeName), NodeId: token["NodeId"] };
+  const attrs = { ...handleAttrs(token, typeName) } 
   const node = new Node(typeName, attrs, undefined, tag || undefined);
   const { position = {} } = token;
 
