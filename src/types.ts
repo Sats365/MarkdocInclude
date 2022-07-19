@@ -1,5 +1,3 @@
-import MarkdownFormatterConfig from "../../../Markdown/MarkdownFormatter/MarkdownFormatterConfig";
-// import { EditRenderableTreeNode } from "../../MarkdownParser/MarkdownParser";
 import type Func from "./ast/function";
 import type Node from "./ast/node";
 import type Tag from "./ast/tag";
