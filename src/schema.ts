@@ -1,5 +1,5 @@
-import type { Schema } from "./types";
 import Tag from "./ast/tag";
+import type { Schema } from "./types";
 
 export const document: Schema = {
 	render: "article",
@@ -100,6 +100,7 @@ export const td: Schema = {
 	attributes: {
 		colspan: { type: Number },
 		rowspan: { type: Number },
+		colwidth: { type: Number },
 		align: { type: String },
 	},
 };
