@@ -92,6 +92,7 @@ export const hr: Schema = {
 
 export const table: Schema = {
 	render: "table",
+	children: ["tbody", "thead"],
 };
 
 export const td: Schema = {

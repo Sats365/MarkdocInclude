@@ -22,7 +22,7 @@ export default {
 	},
 
 	attributes(node: Node, config: Config = {}) {
-		const schema = this.findSchema(node, config) ?? {};
+		const schema = this.findSchema(node, config) ?? {}
 		const output: Record<string, any> = {};
 
 		const attrs = { ...globalAttributes, ...schema.attributes };
