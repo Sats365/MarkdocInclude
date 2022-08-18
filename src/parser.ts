@@ -46,10 +46,7 @@ function handleAttrs(token: Token, type: string) {
 		}
 		case "td":
 		case "th": {
-			if (!Array.isArray(token.attrs) && token.attrs) {
-				console.log(token.attrs);
-				return token.attrs;
-			}
+			if (!Array.isArray(token.attrs) && token.attrs) return token.attrs;
 			const attrs = Object.fromEntries(token.attrs ?? []);
 			let align = "left";
 			if (attrs.style) {
