@@ -93,6 +93,9 @@ export const hr: Schema = {
 export const table: Schema = {
 	render: "table",
 	children: ["tbody", "thead"],
+	transform(node, config) {
+		return new Tag("Table", node.attributes, node.transformChildren(config));
+	},
 };
 
 export const td: Schema = {
@@ -101,7 +104,7 @@ export const td: Schema = {
 	attributes: {
 		colspan: { type: Number },
 		rowspan: { type: Number },
-		colwidth: { type: Number },
+		colwidth: { type: Array },
 		align: { type: String },
 	},
 };
@@ -109,7 +112,9 @@ export const td: Schema = {
 export const th: Schema = {
 	render: "th",
 	attributes: {
-		width: { type: Number },
+		colspan: { type: Number },
+		rowspan: { type: Number },
+		colwidth: { type: Array },
 		align: { type: String },
 	},
 };
