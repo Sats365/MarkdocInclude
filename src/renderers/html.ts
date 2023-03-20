@@ -1,7 +1,8 @@
-import React from "react";
 import MarkdownIt from "markdown-it";
-import type { RenderableTreeNodes } from "../types";
+import React from "react";
 import ReactDOMServer from "react-dom/server";
+import Renderer from "../../../../../../extensions/markdown/core/render/Renderer";
+import type { RenderableTreeNodes } from "../types";
 const { escapeHtml } = MarkdownIt().utils;
 
 // HTML elements that do not have a matching close tag
@@ -36,9 +37,8 @@ export default function render(node: RenderableTreeNodes, { components = {} } = 
 
 	let output = "";
 	if (components?.[name]) {
-		output = ReactDOMServer.renderToString(
-			React.createElement(components[name], attributes, render(children, { components }))
-		);
+		const component = React.createElement(components[name], attributes, Renderer(children, { components }));
+		output = ReactDOMServer.renderToString(component);
 	} else {
 		output = `<${name}`;
 		for (const [k, v] of Object.entries(attributes ?? {})) output += ` ${k}="${escapeHtml(String(v))}"`;
