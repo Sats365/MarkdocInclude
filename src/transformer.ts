@@ -47,9 +47,9 @@ export default {
 	},
 
 	async children(node: Node, config: Config = {}) {
-		return Promise.all(
-			node.children.flatMap(async (child) => await (this as Transformer).node(child, config, node))
-		);
+		return (
+			await Promise.all(node.children.map(async (child) => await (this as Transformer).node(child, config, node)))
+		).flat();
 	},
 
 	async node(node: Node, config: Config = {}, parent?: Node) {

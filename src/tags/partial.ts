@@ -27,7 +27,7 @@ export const partial: Schema = {
 			await part.resolve(scopedConfig).transformChildren(scopedConfig);
 
 		return Array.isArray(partial)
-			? (await Promise.all(partial.flatMap(async (n) => await transformChildren(n)))).flat()
+			? (await Promise.all(partial.map(async (n) => await transformChildren(n)))).flat()
 			: await transformChildren(partial);
 	},
 };

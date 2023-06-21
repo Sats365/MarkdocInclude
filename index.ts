@@ -68,7 +68,7 @@ export async function transform<C extends Config = Config>(nodes: any, options?:
 	const config = mergeConfig(options);
 	const content = resolve(nodes, config);
 
-	if (Array.isArray(content)) return content.flatMap((child) => child.transform(config));
+	if (Array.isArray(content)) return (await Promise.all(content.map((child) => child.transform(config)))).flat();
 	return await content.transform(config);
 }
 

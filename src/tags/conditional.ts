@@ -29,7 +29,7 @@ export const tagIf: Schema = {
 		const conditions = renderConditions(node);
 		for (const { condition, children } of conditions)
 			if (truthy(condition))
-				return (await Promise.all(children.flatMap(async (child) => await child.transform(config)))).flat();
+				return (await Promise.all(children.map(async (child) => await child.transform(config)))).flat();
 		return [];
 	},
 };
