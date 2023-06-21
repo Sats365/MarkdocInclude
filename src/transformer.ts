@@ -1,6 +1,6 @@
 import Tag from "./ast/tag";
 import { Class } from "./schema-types/class";
-import type { Config, Node, NodeType, Schema, RenderableTreeNode, RenderableTreeNodes, SchemaAttribute } from "./types";
+import type { Config, Node, NodeType, RenderableTreeNode, RenderableTreeNodes, Schema, SchemaAttribute } from "./types";
 
 type AttributesSchema = Schema["attributes"];
 
@@ -11,9 +11,9 @@ export const globalAttributes: AttributesSchema = {
 
 export interface Transformer {
 	findSchema(node: Node, config: Config): Schema | undefined;
-	node(node: Node, config: Config): RenderableTreeNodes;
+	node(node: Node, config: Config, parent?: Node): Promise<RenderableTreeNodes>;
 	attributes(node: Node, config: Config): Record<string, any>;
-	children(node: Node, config: Config): RenderableTreeNode[];
+	children(node: Node, config: Config): Promise<RenderableTreeNode[]>;
 }
 
 export default {
@@ -22,7 +22,7 @@ export default {
 	},
 
 	attributes(node: Node, config: Config = {}) {
-		const schema = this.findSchema(node, config) ?? {}
+		const schema = (this as Transformer).findSchema(node, config);
 		const output: Record<string, any> = {};
 
 		const attrs = { ...globalAttributes, ...schema.attributes };
@@ -46,21 +46,23 @@ export default {
 		return output;
 	},
 
-	children(node: Node, config: Config = {}) {
-		return node.children.flatMap((child) => this.node(child, config, node));
+	async children(node: Node, config: Config = {}) {
+		return Promise.all(
+			node.children.flatMap(async (child) => await (this as Transformer).node(child, config, node))
+		);
 	},
 
-	node(node: Node, config: Config = {}, parent?: Node) {
-		const schema = this.findSchema(node, config) ?? {};
+	async node(node: Node, config: Config = {}, parent?: Node) {
+		const schema = (this as Transformer).findSchema(node, config) ?? {};
 		if (schema && schema.transform instanceof Function) {
-			const tag = schema.transform(node, config, parent);
+			const tag = await schema.transform(node, config, parent);
 			return tag;
 		}
 
-		const children = this.children(node, config);
+		const children = await (this as Transformer).children(node, config);
 		if (!schema || !schema.render) return children;
 
-		const attributes = this.attributes(node, config);
+		const attributes = (this as Transformer).attributes(node, config);
 		return new Tag(schema.render, attributes, children);
 	},
 } as Transformer;

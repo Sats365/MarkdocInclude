@@ -14,11 +14,11 @@ export const heading: Schema = {
 	attributes: {
 		level: { type: Number, render: false, required: true },
 	},
-	transform(node, config) {
+	async transform(node, config) {
 		return new Tag(
 			`h${node.attributes["level"]}`,
 			node.transformAttributes(config),
-			node.transformChildren(config)
+			await node.transformChildren(config)
 		);
 	},
 };
@@ -45,9 +45,9 @@ export const fence: Schema = {
 		language: { type: String, render: "data-language" },
 		process: { type: Boolean, render: false, default: true },
 	},
-	transform(node, config) {
+	async transform(node, config) {
 		const attributes = node.transformAttributes(config);
-		const children = node.children.length ? node.transformChildren(config) : [node.attributes.content];
+		const children = node.children.length ? await node.transformChildren(config) : [node.attributes.content];
 
 		return new Tag("pre", attributes, children);
 	},
@@ -56,18 +56,18 @@ export const fence: Schema = {
 export const blockquote: Schema = {
 	render: "blockquote",
 	children: ["heading", "paragraph", "image", "table", "tag", "fence", "blockquote", "list", "hr"],
-	transform(node, config, parent) {
+	async transform(node, config, parent) {
 		node.attributes.depth = (parent.attributes.depth ?? -1) + 1;
-		return new Tag(`blockquote`, { depth: node.attributes.depth }, node.transformChildren(config));
+		return new Tag(`blockquote`, { depth: node.attributes.depth }, await node.transformChildren(config));
 	},
 };
 
 export const item: Schema = {
 	render: "li",
 	children: ["inline", "heading", "paragraph", "image", "table", "tag", "fence", "blockquote", "list", "hr"],
-	transform(node, config, parent) {
+	async transform(node, config, parent) {
 		node.attributes.depth = parent.attributes.depth;
-		return new Tag(`li`, { depth: node.attributes.depth }, node.transformChildren(config));
+		return new Tag(`li`, { depth: node.attributes.depth }, await node.transformChildren(config));
 	},
 };
 
@@ -76,12 +76,12 @@ export const list: Schema = {
 	attributes: {
 		ordered: { type: Boolean, render: false, required: true },
 	},
-	transform(node, config, parent) {
+	async transform(node, config, parent) {
 		node.attributes.depth = (parent.attributes.depth ?? -1) + 1;
 		return new Tag(
 			node.attributes.ordered ? "ol" : "ul",
 			{ depth: node.attributes.depth },
-			node.transformChildren(config)
+			await node.transformChildren(config)
 		);
 	},
 };
@@ -93,8 +93,8 @@ export const hr: Schema = {
 export const table: Schema = {
 	render: "table",
 	children: ["tbody", "thead"],
-	transform(node, config) {
-		return new Tag("Table", node.attributes, node.transformChildren(config));
+	async transform(node, config) {
+		return new Tag("Table", node.attributes, await node.transformChildren(config));
 	},
 };
 

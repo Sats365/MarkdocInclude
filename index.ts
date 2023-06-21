@@ -1,21 +1,21 @@
-import Tokenizer from "./src/tokenizer";
-import parser from "./src/parser";
+import Ast from "./src/ast/index";
 import Node from "./src/ast/node";
 import Tag from "./src/ast/tag";
-import Ast from "./src/ast/index";
-import * as nodes from "./src/schema";
-import tags from "./src/tags/index";
-import { truthy } from "./src/tags/conditional";
 import functions from "./src/functions/index";
+import parser from "./src/parser";
 import renderers from "./src/renderers/index";
+import * as nodes from "./src/schema";
+import { truthy } from "./src/tags/conditional";
+import tags from "./src/tags/index";
+import Tokenizer from "./src/tokenizer";
 import transformer from "./src/transformer";
-import validator from "./src/validator";
-import { parseTags } from "./src/utils";
 import transforms from "./src/transforms/index";
+import { parseTags } from "./src/utils";
+import validator from "./src/validator";
 
+import MarkdownIt from "markdown-it";
 import type Token from "markdown-it/lib/token";
 import type { Config, RenderableTreeNode, ValidateError } from "./src/types";
-import MarkdownIt from "markdown-it";
 
 export * from "./src/types";
 
@@ -62,14 +62,14 @@ export function resolve<C extends Config = Config>(content: any, config: C): any
 	return content.resolve(config);
 }
 
-export function transform<C extends Config = Config>(node: Node, config?: C): RenderableTreeNode;
-export function transform<C extends Config = Config>(nodes: Node[], config?: C): RenderableTreeNode[];
-export function transform<C extends Config = Config>(nodes: any, options?: C): any {
+export function transform<C extends Config = Config>(node: Node, config?: C): Promise<RenderableTreeNode>;
+export function transform<C extends Config = Config>(nodes: Node[], config?: C): Promise<RenderableTreeNode[]>;
+export async function transform<C extends Config = Config>(nodes: any, options?: C) {
 	const config = mergeConfig(options);
 	const content = resolve(nodes, config);
 
 	if (Array.isArray(content)) return content.flatMap((child) => child.transform(config));
-	return content.transform(config);
+	return await content.transform(config);
 }
 
 export function validate<C extends Config = Config>(content: Node, options?: C): ValidateError[] {
@@ -113,16 +113,16 @@ export default {
 };
 
 export {
-	nodes,
-	tags,
-	functions,
-	transforms,
-	renderers,
 	Ast,
 	Tag,
 	Tokenizer,
+	functions,
+	nodes,
 	parseTags,
+	renderers,
+	tags,
 	transformer,
-	validator,
+	transforms,
 	truthy,
+	validator,
 };
