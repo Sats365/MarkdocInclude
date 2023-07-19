@@ -1,7 +1,7 @@
 import MarkdownIt from "markdown-it";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
-import Renderer from "../../../../../../extensions/markdown/core/render/Renderer";
+import Renderer from "../../../../../../core/extensions/markdown/core/render/Renderer";
 import type { RenderableTreeNodes } from "../types";
 const { escapeHtml } = MarkdownIt().utils;
 
